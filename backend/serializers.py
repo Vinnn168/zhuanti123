@@ -63,11 +63,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Email field is required')
         return attrs
     def create(self, validated_data):
-        member = Member()
+        print(validated_data)
+        member = Member(username = validated_data["username"], mail = validated_data["email"])
         member.save()
-        print(member)
-        user = User.objects.create_user(**validated_data, member_id = member.mid)
-        print(user)
+        user = User.objects.create_user(**validated_data, member_id = member.mid) 
         return user
     
 
