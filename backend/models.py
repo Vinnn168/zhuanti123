@@ -26,6 +26,7 @@ class Member(models.Model):
     mail = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     ssn = models.CharField(max_length=255)
+    tokens = models.IntegerField(max_length=255)
     
     class Meta:
         db_table = "Member"

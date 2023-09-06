@@ -9,7 +9,6 @@ from backend import views
 urlpatterns = [
     # path('admin/', admin.site.urls), //db.sqlite3
     path('', TemplateView.as_view(template_name='index.html')),
-    path('home/', TemplateView.as_view(template_name = 'index.html')),
     path('member/', TemplateView.as_view(template_name='index.html')),
     path('member_order/', TemplateView.as_view(template_name='index.html')),
     path('member_edit/', TemplateView.as_view(template_name='index.html')),
@@ -43,12 +42,13 @@ urlpatterns = [
     path('api/cart/<int:cart_id>/', views.cart_delete, name='cart_delete'),
     path('api/upload_product/',views.upload_product, name='upload_product'),
 
-    path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
+    path('token/', views.CustomTokenObtainPairView.as_view(), name ='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name= 'token_refresh'),
     path('csrf-token/', views.csrf_token, name='csrf-token'),
     path('register/',views.register_post,name="register"),
     path('login/',views.login_post,name="login"),
-    path('logout/', views.logout_post, name="logout"),
+    path('logout/', TemplateView.as_view(template_name="index.html"), name="logout"),
+    # path('product/api/product/',views.ProductViewSets.as_view(), name="product1"),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 
 ]

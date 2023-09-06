@@ -5,6 +5,7 @@ from backend.models import *
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class MemberSerializer(serializers.ModelSerializer):
     like_pic_pId = serializers.IntegerField(source='mId.pId', read_only=True)
@@ -92,6 +93,7 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
         return {
+            'user_id': user.id,
             'email': user.email,
             'username': user.username,
             'tokens': user.tokens
@@ -107,3 +109,18 @@ class LogoutSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('bad_token')
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token["custome_field"] = "Custom value"
+
+        return token
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+        data["user_id"] = user.id
+
+        return data

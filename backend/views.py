@@ -3,10 +3,11 @@ from django.shortcuts import redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.middleware import csrf
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 from backend.models import *
 from backend.serializers import *
         
@@ -222,6 +223,11 @@ def upload_product(request):
     return JsonResponse({'message': '請使用 POST 請求上傳照片。',})
 
 
+#----------------vin----------------#
+class ProductViewSets(viewsets.ModelViewSet):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
 @api_view(['POST'])
 def register_post(request):
     user=request.data
@@ -251,3 +257,8 @@ def logout_post(request):
 def csrf_token(request):
     token = csrf.get_token(request)
     return JsonResponse({'csrfToken': token})
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+

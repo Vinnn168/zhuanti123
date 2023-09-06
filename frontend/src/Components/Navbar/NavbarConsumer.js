@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Navbar.css";
 import { GoSearch } from "react-icons/go";
 import { BsHandbag } from "react-icons/bs";
@@ -6,10 +6,17 @@ import { AiOutlineMenu } from "react-icons/ai";
 import Sidebar from "../Cart/sidebar";
 
 const NavbarConsumer = () => {
+    const [isAuth, setIsAuth] = useState(false);
+    useEffect(()=> {
+        if (localStorage.getItem('access_token') !== null){
+        setIsAuth(true);
+    }
+}, [isAuth]);
+
     const linkNumbers = [1, 2, 3, 4];
     const sidebarNumbers = [5, 6, 7, 8];
-    const link = ["/product", "/member", "/about", "/login"];
-    const linkTag = ["探索包款", "會員資訊", "關於我們", "註冊登入"];
+    const link = ["/product", "/member", "/about", isAuth ? "/logout" : "/login"];
+    const linkTag = ["探索包款", "會員資訊", "關於我們", isAuth ? "登出" : "註冊登入"];
 
     //menu
     const [sidebarWidth, setSidebarWidth] = useState('0px');
